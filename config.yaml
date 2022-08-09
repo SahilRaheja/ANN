@@ -7,11 +7,8 @@ params:
   metrics: accuracy
   optimizer: SGD  
   validation_data_size: 5000
+
   
-  
-
-
-
 artifacts:
  artifacts_dir: artifacts
  model_dir: models
