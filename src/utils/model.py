@@ -36,6 +36,7 @@ def save_model(model, model_name, model_dir):
 def save_plots(history, plots_name, plots_dir):
     unique_plots_filename = get_unique_filename(plots_name)
     path_to_plot = os.path.join(plots_dir, unique_plots_filename)
-    img = pd.DataFrame(history.history).plot(figsize=(10, 7))
-    img.savefig(path_to_plot)
+    img = pd.DataFrame(history.history).plot(figsize=(10, 7))#.get_figure().savefig(path_to_plot)
+    img.get_figure().savefig(path_to_plot)
+    # img.savefig(path_to_plot)
 
