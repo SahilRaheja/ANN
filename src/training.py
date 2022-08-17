@@ -2,6 +2,8 @@ from utils.common import read_config
 from utils.data_mgmt import get_data
 from utils.model import create_model
 from utils.model import save_model
+from utils.model import save_plots
+from utils.callbacks import get_callbacks
 import os
 
 import argparse
@@ -21,11 +23,13 @@ def training(config_path):
     no_classes = config["params"]["no_classes"]
     input_shape = config["params"]["input_shape"]
 
+    CALLBACK_LIST = get_callbacks(config, X_train)
+
     model = create_model(LOSS_FUNCTION, OPTIMIZER, METRICS, EPOCHS, no_classes, input_shape)
 
     VALIDATION_SET = (X_valid, y_valid)
 
-    history = model.fit(X_train, y_train, epochs=EPOCHS, validation_data=VALIDATION_SET)
+    history = model.fit(X_train, y_train, epochs=EPOCHS, validation_data=VALIDATION_SET, callbacks=CALLBACK_LIST)
 
     artifacts_dir = config["artifacts"]["artifacts_dir"]
     model_dir = config["artifacts"]["model_dir"]
@@ -36,6 +40,20 @@ def training(config_path):
     model_name = config["artifacts"]["model_name"]
 
     save_model(model, model_name, model_dir_path)
+
+    plots_dir = config["artifacts"]["plots_dir"]
+
+    plots_name = config["artifacts"]["plots_name"]
+
+    plots_dir_path = os.path.join(artifacts_dir, plots_dir)
+    os.makedirs(plots_dir_path, exist_ok=True)
+
+    save_plots(history, plots_name, plots_dir_path)
+
+
+
+
+
 
 
 if __name__ == '__main__':
